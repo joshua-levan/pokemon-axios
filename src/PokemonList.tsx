@@ -4,8 +4,8 @@ const PokemonList = ({ pokemon }:any) => {
   return (
     <div>
       {pokemon.map((pokemon:any) => (
-        <div key={pokemon.name}>
-            <p>{pokemon.name}</p>
+        <div key={pokemon}>
+            <p>{pokemon}</p>
         </div>
 
       ))}
