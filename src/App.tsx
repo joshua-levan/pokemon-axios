@@ -7,7 +7,7 @@ const App = () => {
 const [pokemon, setPokemon] = useState<string[]>([]);
 
   interface Pokemon {
-    name: string
+    name: string[]
   }
 
   const [currentPage, setCurrentPage] = useState<string>('https://pokeapi.co/api/v2/pokemon/')

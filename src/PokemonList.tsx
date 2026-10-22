@@ -1,13 +1,12 @@
+interface PokemonListProps {
+  pokemon: string[];
+}
 
-
-const PokemonList = ({ pokemon }:any) => {
+const PokemonList = ({ pokemon }: PokemonListProps) => {
   return (
     <div>
-      {pokemon.map((pokemon:any) => (
-        <div key={pokemon}>
-            <p>{pokemon}</p>
-        </div>
-
+      {pokemon.map((pokemon) => (
+        <p key={pokemon}>{pokemon}</p>
       ))}
     </div>
   );
