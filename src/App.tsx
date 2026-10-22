@@ -11,7 +11,7 @@ const [pokemon, setPokemon] = useState<string[]>([]);
   }
 
   const [currentPage, setCurrentPage] = useState<string>('https://pokeapi.co/api/v2/pokemon/')
-  const [nexPage, setNextPage] = useState<string | null>('')
+  const [nextPage, setNextPage] = useState<string | null>('')
   const [previousPage, setPreviousPage] = useState<string | null>('') 
   const [loading, setLoading] = useState(true)
   useEffect(() => {
@@ -23,6 +23,7 @@ const [pokemon, setPokemon] = useState<string[]>([]);
     signal: controller.signal
   }).then(res => {
     setNextPage(res.data.next);
+    setPreviousPage(res.data.previous);
     setPokemon(
       res.data.results.map((pokemon: Pokemon) => pokemon.name)
     );
@@ -37,11 +38,29 @@ const [pokemon, setPokemon] = useState<string[]>([]);
   return () => controller.abort();
 }, [currentPage]);
 
+const goToNextPage = () => {
+  if (nextPage !== null) {
+    setCurrentPage(nextPage);
+  }
+};
+
+const goToPreviousPage = () => {
+  if (previousPage !== null) {
+    setCurrentPage(previousPage);
+  }
+};
+
   if(loading) return 'Loading...'
   return (
     <div>
       {/* <a href="https://www.youtube.com/watch?v=o3ZUc7zH8BE">Pokémon Tutorial</a> */}
       <PokemonList pokemon={pokemon}/>
+      <button onClick={goToPreviousPage} disabled={!previousPage}>
+        Prev
+      </button>
+      <button onClick={goToNextPage} disabled={!nextPage}>
+        Next
+      </button>
     </div>
   )
 }
