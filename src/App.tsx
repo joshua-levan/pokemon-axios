@@ -13,15 +13,18 @@ const [pokemon, setPokemon] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState<string>('https://pokeapi.co/api/v2/pokemon/')
   const [nexPage, setNextPage] = useState<string | null>('')
   const [previousPage, setPreviousPage] = useState<string | null>('') 
-
+  const [loading, setLoading] = useState(true)
   useEffect(()=>{
+    setLoading(true)
     axios.get(currentPage).then(res => {
+      setLoading(false)
       console.log(res.data.results)
       setNextPage(res.data.next)
       setPokemon(res.data.results.map((pokemon: Pokemon) => pokemon.name))
     })
   },[currentPage])
 
+  if(loading) return 'Loading...'
   return (
     <div>
       {/* <a href="https://www.youtube.com/watch?v=o3ZUc7zH8BE">Pokémon Tutorial</a> */}
