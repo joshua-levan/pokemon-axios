@@ -14,15 +14,28 @@ const [pokemon, setPokemon] = useState<string[]>([]);
   const [nexPage, setNextPage] = useState<string | null>('')
   const [previousPage, setPreviousPage] = useState<string | null>('') 
   const [loading, setLoading] = useState(true)
-  useEffect(()=>{
-    setLoading(true)
-    axios.get(currentPage).then(res => {
-      setLoading(false)
-      console.log(res.data.results)
-      setNextPage(res.data.next)
-      setPokemon(res.data.results.map((pokemon: Pokemon) => pokemon.name))
-    })
-  },[currentPage])
+  useEffect(() => {
+  const controller = new AbortController();
+
+  setLoading(true);
+
+  axios.get(currentPage, {
+    signal: controller.signal
+  }).then(res => {
+    setNextPage(res.data.next);
+    setPokemon(
+      res.data.results.map((pokemon: Pokemon) => pokemon.name)
+    );
+  }).catch(error => {
+    if (!axios.isCancel(error)) {
+      console.error(error);
+    }
+  }).finally(() => {
+    setLoading(false);
+  });
+
+  return () => controller.abort();
+}, [currentPage]);
 
   if(loading) return 'Loading...'
   return (
